@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.iml
+out/
+*.ipr
+*.iws
+
+# Logs
+*.log
+
+# Other
+dist/
+build/
+coverage/
+tmp/
+*.swp
+*.bak
+*.tmp
