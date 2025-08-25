@@ -19,7 +19,9 @@ Using **NextJS** or an equivalent framework that provides both server-side and c
 
 ## Guidance
 
-- Spend at most **2 hours** on this task.
+- Please spend at most 2–4 hours on the task. We want to protect your time while giving you space to demonstrate your skills and creativity.
+- Avoid using Fusion Signage's existing colour palette. We want to see your own choices, how they support your design and address web accessibility standards.
+- Don’t spend time developing for mobile viewports — focus on desktop only.
 - If any questions arise, make reasonable assumptions and document them as part of your solution.
 
 ## Validation Rules
