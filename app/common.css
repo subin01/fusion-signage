@@ -1,0 +1,94 @@
+:root {
+  --color-primary: hsl(243, 100%, 65%);
+  --color-primary-10: hsl(243, 58%, 50%);
+  --color-primary-50: hsl(243, 57%, 80%);
+  --color-primary-90: hsl(243, 100%, 98%);
+
+  --color-light: hsl(0, 0%, 100%);
+  --color-dark: hsl(0, 0%, 0%);
+
+  --color-dark-10: hsl(243, 25%, 30%);
+  --color-dark-30: hsl(243, 20%, 52%);
+  --color-dark-40: hsl(243, 10%, 70%);
+
+  --surface-10: hsl(230, 24%, 96%);
+  --surface-15: hsl(200, 33%, 98%);
+  --surface-20: hsl(230, 13%, 91%);
+
+  --border-10: hsl(243, 20%, 95%);
+  --border-20: hsl(243, 20%, 88%);
+
+  --status-error: hsl(19, 98%, 42%);
+  --status-error-90: hsl(7, 100%, 98%);
+  --status-success: hsl(97, 96%, 27%);
+
+  --spacing-20: 0.25rem;
+  --spacing-30: 0.5rem;
+  --spacing-40: 0.75rem;
+  --spacing-50: 1rem;
+  --spacing-60: 1.5rem;
+  --spacing-70: 2rem;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+/* Hide outline by default for all focusable elements */
+*:focus {
+  outline: none;
+}
+
+/* Show outline only when focused via keyboard (tabbing) */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-50);
+  outline-offset: 2px;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--color-dark-10);
+  background: var(--background);
+  font-family: "Space Grotesk", Arial, Helvetica, sans-serif;
+  font-size: 0.85rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input {
+  font-family: inherit;
+  font-size: inherit;
+  height: 2rem;
+  padding: var(--spacing-20);
+  border: 1px solid var(--color-dark-40);
+  border-radius: 0.25rem;
+  accent-color: var(--color-primary);
+
+  &.error {
+    border-color: var(--status-error) !important;
+  }
+}
+
+input[type="time"] {
+  min-width: 6.4rem;
+  outline: none !important;
+  text-align: center;
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary-50);
+  }
+}

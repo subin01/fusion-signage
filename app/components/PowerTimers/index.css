@@ -1,0 +1,101 @@
+.power-timers {
+  --row-height: 4rem;
+
+  .power-timers__table {
+    position: relative;
+    min-height: calc(8 * var(--row-height));
+  }
+
+  .power-timers__header,
+  .power-timers__row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1.5fr 1.5fr repeat(7, 1fr);
+    align-items: center;
+    gap: var(--spacing-40);
+    border-bottom: 1px solid var(--border-10);
+    white-space: nowrap;
+
+    .align-center {
+      justify-self: center;
+    }
+  }
+
+  .power-timers__header {
+    font-weight: 500;
+    padding-block: var(--spacing-30);
+    margin-top: var(--spacing-60);
+    border-bottom: 1px solid var(--border-20);
+  }
+
+  .power-timers__row-wrap {
+    position: relative;
+  }
+
+  .power-timers__row {
+    height: var(--row-height);
+
+    &:hover {
+      background: var(--surface-15);
+    }
+
+    &.disabled {
+      > *:not(.switch) {
+        opacity: 0.5;
+      }
+    }
+
+    &.power-timers__row--error {
+      background-color: var(--status-error-90);
+    }
+
+    &.power-timers__row--days-error {
+      .checkbox {
+        border: 1px solid var(--status-error);
+        border-radius: 0.25rem;
+        padding: var(--spacing-20);
+      }
+    }
+  }
+
+  .power-timers__row-message:not(:empty) {
+    padding-block: var(--spacing-20);
+    color: var(--status-error);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-20);
+
+    img {
+      height: 1rem;
+    }
+  }
+
+  .power-timers__new-row,
+  .power-timers__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-50);
+  }
+
+  .power-timers__new-row {
+    height: var(--row-height);
+
+    .message {
+      color: var(--color-dark-30);
+    }
+  }
+
+  .power-timers__actions {
+    padding-block: var(--spacing-50);
+    border-top: 1px solid var(--border-20);
+
+    .power-timers__messages {
+      color: var(--color-dark-30);
+      color: var(--status-success);
+    }
+  }
+
+  .power-timers__row-error {
+    color: var(--status-error);
+  }
+}
