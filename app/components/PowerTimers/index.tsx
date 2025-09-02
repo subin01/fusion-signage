@@ -4,7 +4,8 @@ import "./index.css"
 import { useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
+import Image from "next/image"
 import {
   PowerTimer,
   FormData,
@@ -129,12 +130,13 @@ export default function PowerTimers() {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className={`power-timers__row ${timer?.enabled ? "" : "disabled"} ${hasError} ${hasDaysError}`}
                 >
+                  {/* --------------- @TODO: Extract to separate component ---------------*/}
                   <label className="switch">
                     <input type="checkbox" {...register(`timers.${i}.enabled`)} />
                     <span className="slider"></span>
                     <span className="sr-only">Enabled</span>
                   </label>
-
+                  {/* --------------- @TODO: Extract to separate component ---------------*/}
                   <label>
                     <input
                       type="time"
@@ -146,7 +148,6 @@ export default function PowerTimers() {
                     />
                     <span className="sr-only">Power Off</span>
                   </label>
-
                   <label>
                     <input
                       type="time"
@@ -158,7 +159,6 @@ export default function PowerTimers() {
                     />
                     <span className="sr-only">Power On</span>
                   </label>
-
                   <label className="checkbox checkbox--no-label align-center">
                     <span>All Days?</span>
                     <input
@@ -176,7 +176,6 @@ export default function PowerTimers() {
                       aria-describedby={errors?.timers?.[i]?.daysOfWeek ? `daysOfWeek-error-${i}` : undefined}
                     />
                   </label>
-
                   {DAYS.map((day) => (
                     <label key={day} className="checkbox checkbox--no-label align-center checkbox--day">
                       <input
@@ -197,7 +196,7 @@ export default function PowerTimers() {
 
                 {hasError && (
                   <div className="power-timers__row-message" aria-live="assertive">
-                    <img src="/Info.svg" alt="" /> Error:
+                    <Image src="/Info.svg" alt="" width={24} height={24} /> Error:
                     {errors?.timers?.[i]?.powerOffTime && (
                       <span id={`powerOffTime-error-${i}`}>&bull; {errors.timers[i].powerOffTime.message}</span>
                     )}
@@ -238,7 +237,9 @@ export default function PowerTimers() {
               animate="visible"
               exit="hidden"
             >
-              <motion.img src="/schedules.svg" alt="" width="300" variants={loadingChildVariants} transition={springTransition} />
+              <motion.div variants={loadingChildVariants} transition={springTransition}>
+                <Image src="/schedules.svg" alt="" width={300} height={200} />
+              </motion.div>
               <motion.h2 variants={loadingChildVariants} transition={springTransition}>
                 Saving the Power Timers!
               </motion.h2>
