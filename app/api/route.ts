@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-
-import { PowerTimer } from "./common"
+import { PowerTimer } from "../components/PowerTimers/utils"
 
 async function fetchPowerTimers(): Promise<PowerTimer[]> {
   const defaultTimer = {
@@ -14,9 +13,7 @@ async function fetchPowerTimers(): Promise<PowerTimer[]> {
 }
 
 async function savePowerTimers(powerTimers: PowerTimer[]): Promise<{ message: string }> {
-  console.log("Server -- Saving timers:", powerTimers)
   await new Promise((resolve) => setTimeout(resolve, 5000)) // 5 second delay
-
   return Promise.resolve({ message: "Timers saved successfully!" })
 }
 
@@ -32,6 +29,8 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
+    console.log("Server -- Saving timers:", body)
+
     await savePowerTimers(body)
 
     return NextResponse.json({

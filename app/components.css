@@ -160,7 +160,7 @@
     display: block;
     width: 0%;
     height: 0.25rem;
-    background-color: var(--status-success);
+    background-color: var(--color-primary);
     border-radius: 1rem;
     animation: fillProgress 6s linear infinite;
   }

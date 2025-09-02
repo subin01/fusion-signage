@@ -58,7 +58,7 @@ body {
   color: var(--color-dark-10);
   background: var(--background);
   font-family: "Space Grotesk", Arial, Helvetica, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query
 
 import PowerTimers from "@/app/components/PowerTimers"
 
-import { fetchPowerTimers } from "@/app/api/common"
+import { fetchPowerTimers } from "@/app/components/PowerTimers/utils"
 
 export default async function Home() {
   const queryClient = new QueryClient()

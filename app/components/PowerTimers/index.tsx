@@ -3,10 +3,16 @@
 import "./index.css"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form"
-import { PowerTimer, DAYS, MAX_TIMERS, fetchPowerTimers, savePowerTimers } from "@/app/api/common"
-
-type FormData = { timers: PowerTimer[] }
-type FormError = Record<string, { type: "client" | "server"; message: string }> | undefined
+import {
+  PowerTimer,
+  FormData,
+  FormError,
+  validator,
+  DAYS,
+  MAX_TIMERS,
+  fetchPowerTimers,
+  savePowerTimers,
+} from "@/app/components/PowerTimers/utils"
 
 const defaultTimerRow = {
   timerNumber: 1,
@@ -31,41 +37,6 @@ export default function PowerTimers() {
     },
   })
 
-  async function customResolver(values: FormData) {
-    let errors: { timers?: Array<FormError> } = { timers: [] }
-    let hasError = false
-    values.timers.forEach((timer, i) => {
-      if (timer.enabled) {
-        const timerErrors: FormError = {}
-        if (!timer.powerOffTime) {
-          timerErrors.powerOffTime = { type: "client", message: "Power Off time is required." }
-        }
-        if (!timer.powerOnTime) {
-          timerErrors.powerOnTime = { type: "client", message: "Power On time is required." }
-        }
-        const selectedDays = (timer.daysOfWeek || []).filter(Boolean)
-        if (selectedDays.length === 0) {
-          timerErrors.daysOfWeek = {
-            type: "client",
-            message: "At least one day must be selected.",
-          }
-        }
-        if (Object.keys(timerErrors).length > 0) {
-          errors.timers![i] = timerErrors
-          hasError = true
-        } else {
-          errors.timers![i] = undefined
-        }
-      } else {
-        errors.timers![i] = undefined
-      }
-    })
-    if (!hasError) {
-      errors = {}
-    }
-    return { values, errors }
-  }
-
   const {
     control,
     register,
@@ -78,7 +49,7 @@ export default function PowerTimers() {
     defaultValues: {
       timers: data || [defaultTimerRow],
     },
-    resolver: customResolver,
+    resolver: validator,
     mode: "onSubmit",
     reValidateMode: "onChange",
   })
@@ -138,9 +109,6 @@ export default function PowerTimers() {
             const timer = watchedTimers[i]
             const hasError = Object.keys(errors?.timers?.[i] || {}).length ? "power-timers__row--error" : ""
             const hasDaysError = errors?.timers?.[i]?.daysOfWeek ? "power-timers__row--days-error" : ""
-            const rowError = Object.values((errors?.timers?.[i] as FormError) || {})
-              .map((error) => ` • ${error?.message} `)
-              .join(" ")
             return (
               <div key={field.id} className="power-timers__row-wrap">
                 <div className={`power-timers__row ${timer?.enabled ? "" : "disabled"} ${hasError} ${hasDaysError}`}>
@@ -156,8 +124,10 @@ export default function PowerTimers() {
                       disabled={!timer?.enabled}
                       {...register(`timers.${i}.powerOffTime`)}
                       className={errors?.timers?.[i]?.powerOffTime ? "error" : ""}
+                      aria-invalid={!!errors?.timers?.[i]?.powerOffTime}
+                      aria-describedby={errors?.timers?.[i]?.powerOffTime ? `powerOffTime-error-${i}` : undefined}
                     />
-                    <span className="sr-only">Power On</span>
+                    <span className="sr-only">Power Off</span>
                   </label>
 
                   <label>
@@ -166,6 +136,8 @@ export default function PowerTimers() {
                       disabled={!timer?.enabled}
                       {...register(`timers.${i}.powerOnTime`)}
                       className={errors?.timers?.[i]?.powerOnTime ? "error" : ""}
+                      aria-invalid={!!errors?.timers?.[i]?.powerOnTime}
+                      aria-describedby={errors?.timers?.[i]?.powerOnTime ? `powerOnTime-error-${i}` : undefined}
                     />
                     <span className="sr-only">Power On</span>
                   </label>
@@ -183,6 +155,8 @@ export default function PowerTimers() {
                         const updates = toggleAllDays(e.target.checked)
                         setValue(`timers.${i}.daysOfWeek`, updates.daysOfWeek)
                       }}
+                      aria-invalid={!!errors?.timers?.[i]?.daysOfWeek}
+                      aria-describedby={errors?.timers?.[i]?.daysOfWeek ? `daysOfWeek-error-${i}` : undefined}
                     />
                   </label>
 
@@ -204,14 +178,20 @@ export default function PowerTimers() {
                   ))}
                 </div>
 
-                <div className="power-timers__row-message">
-                  {rowError && (
-                    <>
-                      <img src="/Info.svg" alt="" />
-                      <span>Error: {rowError}</span>
-                    </>
-                  )}
-                </div>
+                {hasError && (
+                  <div className="power-timers__row-message" aria-live="assertive">
+                    <img src="/Info.svg" alt="" /> Error:
+                    {errors?.timers?.[i]?.powerOffTime && (
+                      <span id={`powerOffTime-error-${i}`}>&bull; {errors.timers[i].powerOffTime.message}</span>
+                    )}
+                    {errors?.timers?.[i]?.powerOnTime && (
+                      <span id={`powerOnTime-error-${i}`}>&bull; {errors.timers[i].powerOnTime.message}</span>
+                    )}
+                    {errors?.timers?.[i]?.daysOfWeek && (
+                      <span id={`daysOfWeek-error-${i}`}>&bull; {errors.timers[i].daysOfWeek.message}</span>
+                    )}
+                  </div>
+                )}
               </div>
             )
           })}
@@ -221,7 +201,7 @@ export default function PowerTimers() {
             <div className="power-timers__new-row">
               <div className="message">You can add {MAX_TIMERS - fields.length} more Timers</div>
 
-              <button type="button" className="button-secondary" onClick={addTimer}>
+              <button type="button" className="button-secondary" onClick={addTimer} data-testid="add-timer-button">
                 <img src="/Plus.svg" alt="" />
                 Add A Timer
               </button>
@@ -229,7 +209,7 @@ export default function PowerTimers() {
           )}
 
           {mutation.isPending && (
-            <div className="loading">
+            <div className="loading" aria-live="polite" data-testid="loading">
               <img src="/schedules.svg" alt="" width="300" />
               <br />
               <h2>Saving the Power Timers!</h2>
@@ -244,7 +224,7 @@ export default function PowerTimers() {
         {/* ---------------Form Actions ---------------*/}
         <div className="power-timers__actions">
           <div className="power-timers__messages">{mutation.isSuccess && <p>Power Timers Saved!</p>}</div>
-          <button type="submit" className="button-primary" disabled={mutation.isPending}>
+          <button type="submit" className="button-primary" disabled={mutation.isPending} data-testid="submit-button">
             {mutation.isPending ? "Saving..." : "Save Timers"}
           </button>
         </div>
