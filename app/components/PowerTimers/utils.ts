@@ -13,7 +13,7 @@ export async function fetchPowerTimers() {
   const res = await fetch("/api", { method: "GET" })
   if (!res.ok) throw new Error("Failed to fetch timers")
   const json = await res.json()
-  return json.timers ?? []
+  return Array.isArray(json) ? json : []
 }
 
 export async function savePowerTimers(timers: PowerTimer[]) {

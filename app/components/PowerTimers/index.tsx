@@ -1,8 +1,10 @@
 "use client"
 
 import "./index.css"
+import { useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form"
+import { AnimatePresence, motion } from "framer-motion"
 import {
   PowerTimer,
   FormData,
@@ -44,6 +46,7 @@ export default function PowerTimers() {
     watch,
     trigger,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
@@ -53,6 +56,10 @@ export default function PowerTimers() {
     mode: "onSubmit",
     reValidateMode: "onChange",
   })
+
+  useEffect(() => {
+    reset({ timers: data })
+  }, [data, reset])
 
   const { fields, append } = useFieldArray({ control, name: "timers" })
   const watchedTimers = watch("timers")

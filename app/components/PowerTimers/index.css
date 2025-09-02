@@ -25,10 +25,14 @@
     padding-block: var(--spacing-30);
     margin-top: var(--spacing-60);
     border-bottom: 1px solid var(--border-20);
+    background: var(--color-light);
+    position: relative;
+    z-index: 2;
   }
 
   .power-timers__row-wrap {
     position: relative;
+    z-index: 1;
   }
 
   .power-timers__row {

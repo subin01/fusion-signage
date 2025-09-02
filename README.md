@@ -1,3 +1,11 @@
+# Deployed Link
+
+https://fusion-signage.vercel.app/
+
+<img src="Lighthouse.png" width="400">
+
+.
+
 # Fusion Signage - Front-end Engineer Practical Test
 
 ## Requirements
@@ -15,7 +23,7 @@ Using **NextJS** or an equivalent framework that provides both server-side and c
 
 ![UI mock-up](ui-mock-up.png)
 \
-*Example mock-up for clarity*
+_Example mock-up for clarity_
 
 ## Guidance
 
@@ -42,12 +50,12 @@ Using **NextJS** or an equivalent framework that provides both server-side and c
 
 ```ts
 export type PowerTimer = {
-  timerNumber: number;
-  enabled: boolean;
-  powerOffTime: string; // hh24:mm
-  powerOnTime: string; // hh24:mm
-  daysOfWeek: string[]; // "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
-};
+  timerNumber: number
+  enabled: boolean
+  powerOffTime: string // hh24:mm
+  powerOnTime: string // hh24:mm
+  daysOfWeek: string[] // "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
+}
 ```
 
 ### Stubbed Function
