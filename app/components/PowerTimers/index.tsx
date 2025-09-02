@@ -89,6 +89,7 @@ export default function PowerTimers() {
     append({
       ...defaultTimerRow,
       timerNumber: fields.length + 1,
+      isNew: true,
     })
   }
 
@@ -121,7 +122,13 @@ export default function PowerTimers() {
             const hasDaysError = errors?.timers?.[i]?.daysOfWeek ? "power-timers__row--days-error" : ""
             return (
               <div key={field.id} className="power-timers__row-wrap">
-                <div className={`power-timers__row ${timer?.enabled ? "" : "disabled"} ${hasError} ${hasDaysError}`}>
+                <motion.div
+                  initial={field.isNew ? { y: -40, opacity: 0 } : false}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -40, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className={`power-timers__row ${timer?.enabled ? "" : "disabled"} ${hasError} ${hasDaysError}`}
+                >
                   <label className="switch">
                     <input type="checkbox" {...register(`timers.${i}.enabled`)} />
                     <span className="slider"></span>
@@ -186,7 +193,7 @@ export default function PowerTimers() {
                       <span>{day}</span>
                     </label>
                   ))}
-                </div>
+                </motion.div>
 
                 {hasError && (
                   <div className="power-timers__row-message" aria-live="assertive">
@@ -219,35 +226,33 @@ export default function PowerTimers() {
           )}
 
           {mutation.isPending && (
-            <AnimatePresence>
+            <motion.div
+              className="loading"
+              aria-live="polite"
+              data-testid="loading"
+              variants={{
+                visible: { transition: { staggerChildren: 0.2 } },
+                hidden: {},
+              }}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            >
+              <motion.img src="/schedules.svg" alt="" width="300" variants={loadingChildVariants} transition={springTransition} />
+              <motion.h2 variants={loadingChildVariants} transition={springTransition}>
+                Saving the Power Timers!
+              </motion.h2>
+              <motion.p variants={loadingChildVariants} transition={springTransition}>
+                Please wait, it could take upto 30 seconds
+              </motion.p>
               <motion.div
-                className="loading"
-                aria-live="polite"
-                data-testid="loading"
-                variants={{
-                  visible: { transition: { staggerChildren: 0.2 } },
-                  hidden: {},
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
+                className="progress-bar"
+                variants={{ visible: { opacity: 1 }, hidden: { opacity: 0 } }}
+                transition={{ duration: 0.3 }}
               >
-                <motion.img src="/schedules.svg" alt="" width="300" variants={loadingChildVariants} transition={springTransition} />
-                <motion.h2 variants={loadingChildVariants} transition={springTransition}>
-                  Saving the Power Timers!
-                </motion.h2>
-                <motion.p variants={loadingChildVariants} transition={springTransition}>
-                  Please wait, it could take upto 30 seconds
-                </motion.p>
-                <motion.div
-                  className="progress-bar"
-                  variants={{ visible: { opacity: 1 }, hidden: { opacity: 0 } }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="progress"></span>
-                </motion.div>
+                <span className="progress"></span>
               </motion.div>
-            </AnimatePresence>
+            </motion.div>
           )}
         </div>
 

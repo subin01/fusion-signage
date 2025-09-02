@@ -28,7 +28,8 @@ export async function savePowerTimers(timers: PowerTimer[]) {
   return res.json()
 }
 
-export type FormData = { timers: PowerTimer[] }
+type PowerTimerForm = PowerTimer & { isNew?: boolean }
+export type FormData = { timers: PowerTimerForm[] }
 export type FormError = Record<string, { type: "client" | "server"; message: string }> | undefined
 
 export async function validator(values: FormData) {
