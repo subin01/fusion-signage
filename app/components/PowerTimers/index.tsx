@@ -92,6 +92,9 @@ export default function PowerTimers() {
     })
   }
 
+  const loadingChildVariants = { visible: { opacity: 1, y: 0 }, hidden: { opacity: 0, y: 40 } }
+  const springTransition = { type: "spring" as const, stiffness: 300, damping: 30 }
+
   return (
     <section className="power-timers">
       <form onSubmit={handleSubmit(onSubmit, onFormErrors)} onChange={() => trigger()}>
@@ -216,15 +219,35 @@ export default function PowerTimers() {
           )}
 
           {mutation.isPending && (
-            <div className="loading" aria-live="polite" data-testid="loading">
-              <img src="/schedules.svg" alt="" width="300" />
-              <br />
-              <h2>Saving the Power Timers!</h2>
-              <p>Please wait, it could take upto 30 seconds</p>
-              <div className="progress-bar">
-                <span className="progress"></span>
-              </div>
-            </div>
+            <AnimatePresence>
+              <motion.div
+                className="loading"
+                aria-live="polite"
+                data-testid="loading"
+                variants={{
+                  visible: { transition: { staggerChildren: 0.2 } },
+                  hidden: {},
+                }}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                <motion.img src="/schedules.svg" alt="" width="300" variants={loadingChildVariants} transition={springTransition} />
+                <motion.h2 variants={loadingChildVariants} transition={springTransition}>
+                  Saving the Power Timers!
+                </motion.h2>
+                <motion.p variants={loadingChildVariants} transition={springTransition}>
+                  Please wait, it could take upto 30 seconds
+                </motion.p>
+                <motion.div
+                  className="progress-bar"
+                  variants={{ visible: { opacity: 1 }, hidden: { opacity: 0 } }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <span className="progress"></span>
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
           )}
         </div>
 
