@@ -238,7 +238,7 @@ export default function PowerTimers() {
               exit="hidden"
             >
               <motion.div variants={loadingChildVariants} transition={springTransition}>
-                <Image src="/schedules.svg" alt="" width={300} height={200} />
+                <Image src="/schedules.svg" alt="" width={300} height={200} priority />
               </motion.div>
               <motion.h2 variants={loadingChildVariants} transition={springTransition}>
                 Saving the Power Timers!
